@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLength } from "../../utils/commonFunctions";
 import { logout } from "../../redux/actions/authAction";
 import CommonButton from "../../shared/CommonButton";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const userData = useSelector((state) => state?.userRegisterLogin?.userInfo);
@@ -42,9 +43,9 @@ const HeaderItems = ({ items, dispatch, logout }) => {
         <ul className="navbar-nav" key={index}>
           {item.name !== "Logout" ? (
             <li className="nav-item">
-              <a className="nav-link" href={item.route}>
+              <Link className="nav-link" to={item.route}>
                 {item.name}
-              </a>
+              </Link>
             </li>
           ) : (
             <CommonButton
@@ -59,12 +60,3 @@ const HeaderItems = ({ items, dispatch, logout }) => {
     </div>
   );
 };
-
-/*
-   <li onClick={dispatch(logout())} key={index}>
-                {" "}
-                <a className="nav-link" href={item.route}>
-                  {item.name}
-                </a>
-              </li>
-*/

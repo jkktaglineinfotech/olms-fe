@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getTransactions } from "../api/transctions";
+import { formatTransactionData } from "../utils/commonFunctions";
 
 export const transactionsContainer = () => {
   const [transactionsData, setTransactionsData] = useState([]);
@@ -22,15 +23,4 @@ export const transactionsContainer = () => {
   );
   console.log(finalTransactionsData);
   return { loading, finalTransactionsData };
-};
-
-const formatTransactionData = (data) => {
-  return {
-    Book: data.book.name,
-    Author: data.book.author,
-    Transaction: data.transactionType,
-    Name: data.user.name,
-    Email: data.user.email,
-    Due: data?.dueDate.slice(0, 10),
-  };
 };

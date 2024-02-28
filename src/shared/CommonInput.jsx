@@ -1,5 +1,7 @@
 import React from "react";
 import { Form } from "react-bootstrap";
+import CommonErrorMessageBox from "./CommonErrorMessageBox";
+import CommonToolTip from "./CommonToolTip";
 
 const CommonInput = ({
   className = "",
@@ -7,6 +9,7 @@ const CommonInput = ({
   id = "",
   name,
   required = false,
+  disabled = false,
   ...rest
 }) => {
   return (
@@ -16,6 +19,7 @@ const CommonInput = ({
       onChange={onChange}
       name={name}
       required={required}
+      disabled={disabled}
       {...rest}
     />
   );

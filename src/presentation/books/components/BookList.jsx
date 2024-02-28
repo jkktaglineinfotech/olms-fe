@@ -1,13 +1,13 @@
 import React from "react";
 import Book from "./Book";
-import { booksData } from "../../../description/book.description";
+import { userBookSectionTitle } from "../../../description/book.description";
 
-const BookList = () => {
+const BookList = ({ data }) => {
   return (
     <div className="container mt-5">
-      <h1 className="mb-4">Featured Books</h1>
+      <h1 className="mb-4">{userBookSectionTitle}</h1>
       <div className="row">
-        {booksData.map((book) => (
+        {data.map((book) => (
           <div key={book._id} className="col-md-6">
             <Book {...book} />
           </div>

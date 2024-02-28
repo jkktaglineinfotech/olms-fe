@@ -3,8 +3,8 @@ export const loginUser = [
     name: "Home",
     route: "/home",
   },
-  { name: "My Transactions", route: "/user-transactions" },
-  { name: "Profile", route: "/user-profile" },
+  // { name: "My Transactions", route: "/user-transactions" },
+  { name: "Profile", route: "/profile" },
   { name: "Logout", route: null },
 ];
 

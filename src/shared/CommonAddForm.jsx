@@ -5,7 +5,7 @@ import CommonInput from "./CommonInput";
 import CommonErrorMessageBox from "./CommonErrorMessageBox";
 import CommonButton from "./CommonButton";
 
-const CommonEditForm = ({
+const CommonAddForm = ({
   showModal,
   handleClose,
   onSubmit,
@@ -14,17 +14,9 @@ const CommonEditForm = ({
   formAttributes,
   className = "",
   onChange,
-  buttonText = "Update",
-  title = "Edit Data",
+  buttonText = "Add",
+  title = "Add New",
 }) => {
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     // You can perform additional validation here if needed
@@ -87,4 +79,4 @@ const CommonEditForm = ({
   );
 };
 
-export default CommonEditForm;
+export default CommonAddForm;

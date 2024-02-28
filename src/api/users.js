@@ -34,9 +34,9 @@ export const editUser = async (userId, userInfo) => {
   }
 };
 
-export const createUser = async () => {
+export const createUser = async (userInfo) => {
   try {
-    const { data } = await client.post(usersApiEndpoints.createUser);
+    const { data } = await client.post(usersApiEndpoints.createUser, userInfo);
     return data;
   } catch (error) {
     catchError(error);

@@ -5,16 +5,17 @@ import AdminUsersComponent from "../presentation/admin/AdminUsersComponent";
 import AdminTransactionsComponent from "../presentation/admin/AdminTransactionsComponent";
 import ProtectedAdminRoute from "../presentation/auth/ProtectedAdminRoute";
 import ProtectedUserRoute from "../presentation/auth/ProtectedUserRoute";
-import Logout from "../presentation/auth/Logout";
 import NotFound from "../shared/NotFound";
+import Home from "../presentation/user/Home";
+import Profile from "../presentation/user/Profile";
 
 const privateRoutes = [
   {
     element: <ProtectedUserRoute />,
     children: [
-      { path: "/home", element: <UserBooksComponent /> },
-      { path: "/user-transactions", element: <UserBooksComponent /> },
-      { path: "/user-profile", element: <UserBooksComponent /> },
+      { path: "/home", element: <Home /> },
+      { path: "/transactions", element: <UserBooksComponent /> },
+      { path: "/profile", element: <Profile /> },
       // { path: "/logout", element: <Logout /> },
     ],
   },

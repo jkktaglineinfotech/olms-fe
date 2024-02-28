@@ -1,90 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+
 import CommonInput from "../../shared/CommonInput";
 import CommonLabel from "../../shared/CommonLabel";
-import {
-  loginSuccess,
-  setReduxUserState,
-} from "../../redux/actions/authAction";
+
 import CommonButton from "../../shared/CommonButton";
-import { loginAttributes } from "../../description/login.description";
 import CommonErrorMessageBox from "../../shared/CommonErrorMessageBox";
-import { validateLoginInfo } from "../../utils/validations";
-import { Alert } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { signIn } from "../../api/auth";
-import Loader from "../layout/Loader";
-import { userLength } from "../../utils/commonFunctions";
+import { loginContainer } from "../../container/login.container";
+
 const Login = () => {
-  const userData = useSelector((state) => state?.userRegisterLogin?.userInfo);
-
-  const [showAlert, setShowAlert] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const [loading, setLoading] = useState(false);
-
-  const [authData, setAuthData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const handleInputChange = (e) => {
-    setAuthData({
-      ...authData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleLogin = async () => {
-    const { error, ok } = validateLoginInfo({
-      email: authData.email,
-      password: authData.password,
-    });
-
-    if (!ok) {
-      setErrorMessage(error);
-      setShowAlert(true);
-      return;
-    }
-    setLoading(true);
-    const data = await signIn(authData);
-    if (!data) {
-      setLoading(false);
-      return;
-    }
-    localStorage.setItem("userInfo", JSON.stringify(data.data));
-    localStorage.setItem("authToken", data?.data?.accessToken);
-
-    console.log(data.data);
-    setLoading(false);
-
-    dispatch(setReduxUserState(data.data));
-    console.log(data.data.role);
-    if (data?.data?.role === "ADMIN") navigate("/admin/home");
-    else navigate.push("/home");
-  };
-
-  useEffect(() => {
-    if (userLength(userData) && userData.role === "ADMIN") {
-      navigate("/admin/home");
-    } else if (userLength(userData) && userData.role !== "ADMIN") {
-      navigate("/home");
-    }
-  }, []);
-
+  const {
+    authData,
+    loginAttributes,
+    errors,
+    handleInputChange,
+    loading,
+    handleLogin,
+    userLength,
+  } = loginContainer();
   return (
     <div className="container text-center mt-5">
       <h2>Login</h2>
-      {showAlert && (
+      {/* {showAlert && (
         <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
           {errorMessage}
         </Alert>
-      )}
-      {/* <Loader visible={loading} /> */}
+      )} */}
       <div className="mx-auto" style={{ maxWidth: "400px" }}>
         {loginAttributes.map((item) => (
           <div className="mb-3 row" key={item.id}>
@@ -102,17 +42,18 @@ const Login = () => {
                 onChange={handleInputChange}
                 //required={item.isRequired}
                 required={item.isRequired}
-                className={`form-control ${
-                  authData[item.name].length > 0 &&
-                  authData[item.name].length < 6
-                    ? "is-invalid"
-                    : ""
-                }`}
+                // className={`form-control ${
+                //   authData[item.name].length > 0 &&
+                //   authData[item.name].length < 6
+                //     ? "is-invalid"
+                //     : ""
+                // }`}
               />
-              {item.isRequired && !authData[item.name].trim() && (
+              {errors[item.name] && (
                 <CommonErrorMessageBox
                   message={item.errorMessage}
-                  className="invalid-feedback"
+                  variant="danger"
+                  className="mt-1 small"
                 />
               )}
             </div>

@@ -1,12 +1,11 @@
 import React from "react";
-import { Form } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 
-const CommonErrorMessageBox = ({ className, message = "" }) => {
-  if (!message.trim()) return null;
+const CommonErrorMessageBox = ({ message, ...rest }) => {
   return (
-    <Form.Control.Feedback type="invalid" className={className}>
+    <Alert tooltip {...rest}>
       {message}
-    </Form.Control.Feedback>
+    </Alert>
   );
 };
 

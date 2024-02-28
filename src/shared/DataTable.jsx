@@ -1,5 +1,4 @@
 import React from "react";
-import Loader from "../presentation/layout/Loader";
 
 const DataTable = ({ data, onAction, hasActions = false, loading = false }) => {
   const tableHeaders = Object.keys(data[0]);
@@ -23,9 +22,9 @@ const DataTable = ({ data, onAction, hasActions = false, loading = false }) => {
                 (header, colIndex) =>
                   header !== "Actions" && <td key={colIndex}>{row[header]}</td>
               )}
-              <td>
-                {hasActions &&
-                  row?.Actions?.map((option, optionIndex) => (
+              {hasActions && (
+                <td>
+                  {row?.Actions?.map((option, optionIndex) => (
                     <button
                       key={optionIndex}
                       className="btn btn-primary btn-sm me-2"
@@ -34,7 +33,8 @@ const DataTable = ({ data, onAction, hasActions = false, loading = false }) => {
                       {option}
                     </button>
                   ))}
-              </td>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

@@ -34,3 +34,24 @@ export const deleteBook = async (bookId, bookData) => {
     catchError(error);
   }
 };
+
+export const createBook = async (bookData) => {
+  try {
+    const { data } = await client.post(booksApiEndpoints.createBook, bookData);
+    return data;
+  } catch (error) {
+    catchError(error);
+  }
+};
+
+export const issueBook = async (bookId, dueDate) => {
+  try {
+    const { data } = await client.post(
+      `${booksApiEndpoints.issueBook}/${bookId}`,
+      dueDate
+    );
+    return data;
+  } catch (error) {
+    catchError(error);
+  }
+};

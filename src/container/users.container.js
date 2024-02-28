@@ -1,20 +1,42 @@
 import { useEffect, useState } from "react";
-import { deleteUser, editUser, getUsers } from "../api/users";
-import { userActions } from "../description/user.description";
-import { confirmDelete, showSuccessMessage } from "../utils/commonFunctions";
+import { createUser, deleteUser, editUser, getUsers } from "../api/users";
+import {
+  addUserForm,
+  defaultUserData,
+  editUserForm,
+} from "../description/user.description";
+import {
+  confirmDelete,
+  formatUserData,
+  showSuccessMessage,
+} from "../utils/commonFunctions";
+import {
+  validateCreateUserInfo,
+  validateEditUserInfo,
+} from "../utils/validations";
+import { toast } from "react-toastify";
+import { checkValid } from "../utils/commonValidations";
 
 export const userContainer = () => {
   const [usersData, setUsersData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState([]);
   const handleShow = () => setOpenEditModal(true);
   const handleClose = () => setOpenEditModal(false);
-  const [editUserData, setEditUserData] = useState({
-    name: "",
-    userName: "",
-    email: "",
-    // password: "",
-    contact: "",
+
+  const handleShowAdd = () => {
+    setModalMode("Add");
+    setUserData({});
+    setOpenAddModal(true);
+  };
+  const handleCloseAdd = () => setOpenAddModal(false);
+
+  const [userData, setUserData] = useState({
+    ...defaultUserData,
   });
+
+  const [modalMode, setModalMode] = useState(null);
+
   const fetchUsers = async () => {
     setLoading(true);
     const data = await getUsers();
@@ -32,11 +54,12 @@ export const userContainer = () => {
 
   const [selectedData, setSelectedData] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
 
-  const handleOnEditChange = (e) => {
+  const handleOnChange = (e) => {
     console.log(e);
-    setEditUserData({
-      ...editUserData,
+    setUserData({
+      ...userData,
       [e.target.name]: e.target.value,
     });
   };
@@ -45,8 +68,9 @@ export const userContainer = () => {
     console.log(`${option} clicked for row:`, row);
     setSelectedData(row);
     if (option === "Edit") {
-      setEditUserData({
-        ...editUserData,
+      setModalMode("Edit");
+      setUserData({
+        ...userData,
         name: row.Name,
         userName: row.UserName,
         email: row.Email,
@@ -67,11 +91,23 @@ export const userContainer = () => {
     }
   };
 
-  const handleFormSubmit = async (userInfo) => {
+  const handleUpdateUser = async (userInfo) => {
+    const errorObj = {};
+    const error = editUserForm.map(
+      (item) =>
+        (errorObj[item.name] = checkValid({
+          ...item,
+          value: userInfo[item.name],
+        }))
+    );
+    setErrors(errorObj);
+    console.log(errorObj);
+    if (Object.values(errorObj).some((val) => val)) return;
     setLoading(true);
     const data = await editUser(selectedData.id, userInfo);
     if (!data) {
       setLoading(false);
+      setOpenEditModal(false);
       return;
     }
     const updatedUsers = usersData.map((user) =>
@@ -82,9 +118,50 @@ export const userContainer = () => {
     setUsersData([...updatedUsers]);
     setSelectedData(null);
     setLoading(false);
+    setOpenEditModal(false);
     await showSuccessMessage({
       title: "Updated",
-      text: "Book details updated successfully !",
+      text: "User details updated successfully !",
+    });
+  };
+
+  const handleFormSubmit = (userInfo) => {
+    if (modalMode === "Add") handleCreateUser(userInfo);
+    else handleUpdateUser(userInfo);
+  };
+  const handleCreateUser = async (userInfo) => {
+    console.log(userInfo);
+    const errorObj = {};
+    const error = addUserForm.map(
+      (item) =>
+        (errorObj[item.name] = checkValid({
+          ...item,
+          value: userInfo[item.name],
+        }))
+    );
+    setErrors(errorObj);
+    console.log(errorObj);
+    if (Object.values(errorObj).some((val) => val)) return;
+    // const { error, ok } = validateCreateUserInfo(userInfo);
+    // if (!ok) {
+    //   toast.error(error);
+    //   return;
+    // }
+    setLoading(true);
+
+    const data = await createUser(userInfo);
+    if (!data) {
+      setLoading(false);
+      //handleCloseAdd();
+      return;
+    }
+    setUsersData([data.data, ...usersData]);
+    setLoading(false);
+    setUserData({ ...defaultUserData });
+    handleCloseAdd();
+    await showSuccessMessage({
+      title: "Created",
+      text: "User created successfully !",
     });
   };
 
@@ -109,22 +186,15 @@ export const userContainer = () => {
     finalUserData,
     handleAction,
     handleClose,
-    handleOnEditChange,
     selectedData,
     openEditModal,
-    editUserData,
     handleFormSubmit,
-  };
-};
-
-const formatUserData = (data) => {
-  return {
-    Name: data.name,
-    Contact: data.contact,
-    id: data._id,
-    Email: data.email,
-    // Password: data?.password || "",
-    UserName: data.userName,
-    Actions: userActions,
+    handleShowAdd,
+    handleCloseAdd,
+    openAddModal,
+    userData,
+    modalMode,
+    handleOnChange,
+    errors,
   };
 };

@@ -19,11 +19,15 @@ export const booksData = [
 
 export const bookActions = ["Edit", "Delete"];
 
-export const editBookForm = [
+export const bookActionsIssue = ["Edit", "Delete", "Issue"];
+
+export const bookActionsReturn = ["Edit", "Delete", "Return"];
+
+export const commonBookForm = [
   {
     id: 1,
     control: "input",
-    label: "Name",
+    label: "Book Name",
     type: "text",
     name: "name",
     value: "",
@@ -39,7 +43,14 @@ export const editBookForm = [
     name: "author",
     value: "",
     isRequired: true,
-    validateAs: "author",
+    validateAs: "name",
     errorMessage: "Please enter valid author name",
   },
 ];
+
+export const userBookSectionTitle = "Featured Books";
+
+export const defaultBookData = {
+  author: "",
+  name: "",
+};

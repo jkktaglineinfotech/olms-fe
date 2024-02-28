@@ -22,3 +22,8 @@ export const loginAttributes = [
     errorMessage: "Please enter valid password",
   },
 ];
+
+export const defaultUserData = {
+  email: "",
+  password: "",
+};

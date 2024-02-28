@@ -5,7 +5,7 @@ export const booksApiEndpoints = {
   updateBook: "book",
   createBook: "book",
   deleteBook: "book",
-  issueBook: "book/issus",
+  issueBook: "book/issue",
   returnBook: "book/return",
   getBookDashboardData: "book/dashboard",
 };
