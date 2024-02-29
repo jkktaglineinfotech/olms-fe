@@ -6,7 +6,7 @@ import {
 } from "../description/book.description";
 import { userActions } from "../description/user.description";
 
-export const userLength = (data) => Object.keys(data).length;
+export const userLength = (data) => data && Object.keys(data).length;
 
 export const confirmDelete = ({ title, text, ...rest }) => {
   return new Promise((resolve) => {
@@ -90,3 +90,6 @@ export const formatTransactionData = (data) => {
     Due: data?.dueDate.slice(0, 10),
   };
 };
+
+export const checkIsError = (errorObj) =>
+  Object.values(errorObj).some((val) => val);

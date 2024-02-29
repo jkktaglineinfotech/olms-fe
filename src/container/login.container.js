@@ -7,13 +7,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkValid } from "../utils/commonValidations";
 import { useEffect } from "react";
-import { userLength } from "../utils/commonFunctions";
-
+import { checkIsError, userLength } from "../utils/commonFunctions";
+import { signIn } from "../api/auth";
+import { setReduxUserState } from "../redux/actions/authAction";
 export const loginContainer = () => {
   const userData = useSelector((state) => state?.userRegisterLogin?.userInfo);
 
-  const [showAlert, setShowAlert] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [hasChanges, setHasChanges] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -25,6 +26,7 @@ export const loginContainer = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
   const handleInputChange = (e) => {
+    setHasChanges(true);
     setAuthData({
       ...authData,
       [e.target.name]: e.target.value,
@@ -32,6 +34,7 @@ export const loginContainer = () => {
   };
 
   const handleLogin = async () => {
+    setButtonLoading(true);
     // const { error, ok } = validateLoginInfo({
     //   email: authData.email,
     //   password: authData.password,
@@ -51,25 +54,31 @@ export const loginContainer = () => {
         }))
     );
     setErrors(errorObj);
-    console.log(errorObj);
-    if (Object.values(errorObj).some((val) => val)) return;
+    // console.log(errorObj);
+    if (checkIsError(errorObj)) {
+      setButtonLoading(false);
+      return;
+    }
 
-    // setLoading(true);
-    // const data = await signIn(authData);
-    // if (!data) {
-    //   setLoading(false);
-    //   return;
-    // }
-    // localStorage.setItem("userInfo", JSON.stringify(data.data));
-    // localStorage.setItem("authToken", data?.data?.accessToken);
+    setLoading(true);
+    const data = await signIn(authData);
+    if (!data) {
+      setButtonLoading(false);
+      setLoading(false);
+      return;
+    }
+    localStorage.setItem("userInfo", JSON.stringify(data.data));
+    localStorage.setItem("authToken", data?.data?.accessToken);
 
     // console.log(data.data);
-    // setLoading(false);
+    setLoading(false);
 
-    // dispatch(setReduxUserState(data.data));
-    // console.log(data.data.role);
-    // if (data?.data?.role === "ADMIN") navigate("/admin/home");
-    // else navigate("/home");
+    dispatch(setReduxUserState(data.data));
+    setErrors([]);
+    setButtonLoading(false);
+
+    if (data?.data?.role === "ADMIN") navigate("/admin/home");
+    else navigate("/home");
   };
 
   useEffect(() => {
@@ -87,5 +96,7 @@ export const loginContainer = () => {
     loading,
     handleLogin,
     userLength,
+    hasChanges,
+    buttonLoading,
   };
 };

@@ -6,11 +6,13 @@ import {
 } from "../description/book.description";
 import {
   calculateDueDate,
+  checkIsError,
   confirmDelete,
   formatBookData,
   showSuccessMessage,
 } from "../utils/commonFunctions";
 import { checkValid } from "../utils/commonValidations";
+import { trimObjectValues } from "../utils/javaScript";
 
 export const bookContainer = () => {
   const [booksData, setBooksData] = useState([]);
@@ -33,34 +35,44 @@ export const bookContainer = () => {
 
   let finalBooksData = booksData?.map((data) => formatBookData(data));
 
-  const [openEditModal, setOpenEditModal] = useState(false);
-  const [openAddModal, setOpenAddModal] = useState(false);
-  const [openDropDownModal, setOpenDropDownModal] = useState(false);
+  // const [openEditModal, setOpenEditModal] = useState(false);
+  // const [openAddModal, setOpenAddModal] = useState(false);
+  const [openBookModal, setOpenBookModal] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const handleShowAdd = () => {
     setModalMode("Add");
-    setOpenAddModal(true);
+    setErrors([]);
+    setHasChanges(false);
+    setOpenBookModal(true);
   };
-  const handleCloseAdd = () => setOpenAddModal(false);
-
-  const handleShowDropDown = () => setOpenDropDownModal(true);
-  const handleCloseDropDown = () => setOpenDropDownModal(false);
+  const handleCloseAdd = () => {
+    setErrors([]);
+    setModalMode(null);
+    setOpenBookModal(false);
+  };
 
   const [selectedData, setSelectedData] = useState(null);
   const [bookData, setBookData] = useState({
     ...defaultBookData,
   });
-  const handleShow = () => setOpenEditModal(true);
+  const handleShow = () => {
+    setErrors([]);
+    setOpenBookModal(true);
+  };
   const handleClose = () => {
     setBookData({ ...defaultBookData });
-    setOpenEditModal(false);
+    setErrors([]);
+    setOpenBookModal(false);
   };
 
   const handleAction = async (row, option) => {
-    console.log(`${option} clicked for row:`, row);
+    // console.log(`${option} clicked for row:`, row);
     setSelectedData(row);
     if (option === "Edit") {
       setModalMode("Edit");
+      setHasChanges(false);
       setBookData({
         ...bookData,
         author: row.Author,
@@ -90,6 +102,7 @@ export const bookContainer = () => {
   };
 
   const handleDeleteBook = async (bookId) => {
+    setButtonLoading(true);
     setLoading(true);
     const data = await deleteBook(bookId);
     if (!data) {
@@ -99,6 +112,7 @@ export const bookContainer = () => {
     const updatedBooks = booksData.filter((book) => book._id !== bookId);
     setBooksData([...updatedBooks]);
     setSelectedData(null);
+    setButtonLoading(false);
     setLoading(false);
     await showSuccessMessage({
       title: "Deleted",
@@ -112,27 +126,34 @@ export const bookContainer = () => {
   };
 
   const handleUpdateBook = async (bookData) => {
+    setButtonLoading(true);
+    const finalBookInfo = trimObjectValues(bookData);
+
     const errorObj = {};
     const error = commonBookForm.map(
       (item) =>
         (errorObj[item.name] = checkValid({
           ...item,
-          value: bookData[item.name],
+          value: finalBookInfo[item.name],
         }))
     );
     setErrors(errorObj);
-    console.log(errorObj);
-    if (Object.values(errorObj).some((val) => val)) return;
+
+    if (checkIsError(errorObj)) {
+      setButtonLoading(false);
+      return;
+    }
     // const { ok, error } = validateBookDetails(bookData);
     // if (!ok) {
     //   toast.error(error);
     //   return;
     // }
-    setLoading(true);
-    const data = await updateBook(selectedData.id, bookData);
-    console.log("Submit", data);
+    // setLoading(true);
+    const data = await updateBook(selectedData.id, finalBookInfo);
+    // console.log("Submit", data);
     if (!data) {
-      setLoading(false);
+      setButtonLoading(false);
+      // setLoading(false);
       return;
     }
     const updatedBooks = booksData.map((book) =>
@@ -142,8 +163,10 @@ export const bookContainer = () => {
     console.log(updatedBooks);
     setBooksData([...updatedBooks]);
     setSelectedData(null);
+    setErrors([]);
     handleClose();
-    setLoading(false);
+    setButtonLoading(false);
+    // setLoading(false);
     await showSuccessMessage({
       title: "Updated",
       text: "Book details updated successfully !",
@@ -151,7 +174,7 @@ export const bookContainer = () => {
   };
 
   const handleOnChange = (e) => {
-    console.log(e);
+    setHasChanges(true);
     setBookData({
       ...bookData,
       [e.target.name]: e.target.value,
@@ -159,33 +182,40 @@ export const bookContainer = () => {
   };
 
   const handleCreateBook = async (bookInfo) => {
-    console.log(bookInfo);
+    setButtonLoading(true);
+    const finalBookInfo = trimObjectValues(bookInfo);
+
     const errorObj = {};
     const error = commonBookForm.map(
       (item) =>
         (errorObj[item.name] = checkValid({
           ...item,
-          value: bookInfo[item.name],
+          value: finalBookInfo[item.name],
         }))
     );
-    setErrors(error);
-    console.log(errorObj);
+    setErrors(errorObj);
+    if (checkIsError(errorObj)) {
+      setButtonLoading(false);
+      return;
+    }
 
-    if (Object.values(errorObj).some((val) => val)) return;
-    setLoading(true);
+    // setLoading(true);
 
     // const { ok, error } = validateBookDetails(bookInfo);
     // if (!ok) {
     //   toast.error(error);
     //   return;
     // }
-    const data = await createBook(bookInfo);
+    const data = await createBook(finalBookInfo);
     if (!data) {
-      setLoading(false);
+      setButtonLoading(false);
+      // setLoading(false);
       return;
     }
     setBooksData([data.data, ...booksData]);
-    setLoading(false);
+    setButtonLoading(false);
+    // setLoading(false);
+    setErrors([]);
 
     handleCloseAdd();
     await showSuccessMessage({
@@ -220,15 +250,15 @@ export const bookContainer = () => {
     setBookData,
     handleAction,
     handleClose,
-    openEditModal,
     selectedData,
     handleShowAdd,
     handleCloseAdd,
-    openAddModal,
+    openBookModal,
     handleSearch,
     handleClear,
-    handleShowDropDown,
     modalMode,
     errors,
+    hasChanges,
+    buttonLoading,
   };
 };

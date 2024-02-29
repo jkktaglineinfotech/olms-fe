@@ -18,7 +18,7 @@ export const loginAttributes = [
     name: "password",
     value: "",
     isRequired: true,
-    validateAs: "password",
+    validateAs: "loginPassword",
     errorMessage: "Please enter valid password",
   },
 ];

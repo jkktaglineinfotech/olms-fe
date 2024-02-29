@@ -43,7 +43,7 @@ const CommonEditForm = ({
           {formAttributes.map((item) => (
             <div className="mb-3 row" key={item.id}>
               <CommonLabel
-                value={item.label}
+                label={item.label}
                 //className="col-sm-4 col-form-label"
                 className="form-label"
               />

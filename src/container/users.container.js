@@ -6,6 +6,7 @@ import {
   editUserForm,
 } from "../description/user.description";
 import {
+  checkIsError,
   confirmDelete,
   formatUserData,
   showSuccessMessage,
@@ -16,20 +17,29 @@ import {
 } from "../utils/validations";
 import { toast } from "react-toastify";
 import { checkValid } from "../utils/commonValidations";
+import { trimObjectValues } from "../utils/javaScript";
 
 export const userContainer = () => {
   const [usersData, setUsersData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
-  const handleShow = () => setOpenEditModal(true);
-  const handleClose = () => setOpenEditModal(false);
+
+  const handleShow = () => {
+    setErrors([]);
+    setOpenUserModal(true);
+  };
+  const handleClose = () => {
+    setErrors([]);
+    setOpenUserModal(false);
+  };
 
   const handleShowAdd = () => {
     setModalMode("Add");
     setUserData({});
-    setOpenAddModal(true);
+    setHasChanges(false);
+    setOpenUserModal(true);
   };
-  const handleCloseAdd = () => setOpenAddModal(false);
+  const handleCloseAdd = () => setOpenUserModal(false);
 
   const [userData, setUserData] = useState({
     ...defaultUserData,
@@ -41,7 +51,7 @@ export const userContainer = () => {
     setLoading(true);
     const data = await getUsers();
     setLoading(false);
-    console.log(data.data);
+    // console.log(data.data);
     setUsersData(data?.data);
   };
 
@@ -50,14 +60,16 @@ export const userContainer = () => {
   }, []);
 
   const finalUserData = usersData.map((data) => formatUserData(data));
-  console.log(finalUserData);
 
   const [selectedData, setSelectedData] = useState(null);
-  const [openEditModal, setOpenEditModal] = useState(false);
-  const [openAddModal, setOpenAddModal] = useState(false);
+  // const [openEditModal, setOpenEditModal] = useState(false);
+  // const [openAddModal, setOpenAddModal] = useState(false);
+  const [openUserModal, setOpenUserModal] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const handleOnChange = (e) => {
-    console.log(e);
+    setHasChanges(true);
     setUserData({
       ...userData,
       [e.target.name]: e.target.value,
@@ -69,6 +81,7 @@ export const userContainer = () => {
     setSelectedData(row);
     if (option === "Edit") {
       setModalMode("Edit");
+      setHasChanges(false);
       setUserData({
         ...userData,
         name: row.Name,
@@ -92,6 +105,8 @@ export const userContainer = () => {
   };
 
   const handleUpdateUser = async (userInfo) => {
+    setButtonLoading(true);
+
     const errorObj = {};
     const error = editUserForm.map(
       (item) =>
@@ -100,25 +115,35 @@ export const userContainer = () => {
           value: userInfo[item.name],
         }))
     );
-    setErrors(errorObj);
     console.log(errorObj);
-    if (Object.values(errorObj).some((val) => val)) return;
-    setLoading(true);
-    const data = await editUser(selectedData.id, userInfo);
+    setErrors(errorObj);
+    const finalUserInfo = trimObjectValues(userInfo);
+
+    if (checkIsError(errorObj)) {
+      setButtonLoading(false);
+      return;
+    }
+    // setLoading(true);
+    delete finalUserInfo.password;
+
+    const data = await editUser(selectedData.id, finalUserInfo);
     if (!data) {
-      setLoading(false);
-      setOpenEditModal(false);
+      // setLoading(false);
+      setButtonLoading(false);
+      setOpenUserModal(true);
       return;
     }
     const updatedUsers = usersData.map((user) =>
       user._id === selectedData?.id ? data?.data : user
     );
 
-    console.log(updatedUsers);
+    // console.log(updatedUsers);
     setUsersData([...updatedUsers]);
     setSelectedData(null);
-    setLoading(false);
-    setOpenEditModal(false);
+    setErrors([]);
+    // setLoading(false);
+    setButtonLoading(false);
+    setOpenUserModal(false);
     await showSuccessMessage({
       title: "Updated",
       text: "User details updated successfully !",
@@ -130,34 +155,42 @@ export const userContainer = () => {
     else handleUpdateUser(userInfo);
   };
   const handleCreateUser = async (userInfo) => {
-    console.log(userInfo);
+    setButtonLoading(true);
+    const finalUserInfo = trimObjectValues(userInfo);
+
     const errorObj = {};
     const error = addUserForm.map(
       (item) =>
         (errorObj[item.name] = checkValid({
           ...item,
-          value: userInfo[item.name],
+          value: finalUserInfo[item.name],
         }))
     );
     setErrors(errorObj);
-    console.log(errorObj);
-    if (Object.values(errorObj).some((val) => val)) return;
+    // console.log(errorObj);
+    if (checkIsError(errorObj)) {
+      setButtonLoading(false);
+      return;
+    }
     // const { error, ok } = validateCreateUserInfo(userInfo);
     // if (!ok) {
     //   toast.error(error);
     //   return;
     // }
-    setLoading(true);
+    // setLoading(true);
 
-    const data = await createUser(userInfo);
+    const data = await createUser(finalUserInfo);
     if (!data) {
-      setLoading(false);
+      setButtonLoading(false);
+      // setLoading(false);
       //handleCloseAdd();
       return;
     }
     setUsersData([data.data, ...usersData]);
-    setLoading(false);
+    setButtonLoading(false);
+    // setLoading(false);
     setUserData({ ...defaultUserData });
+    setErrors([]);
     handleCloseAdd();
     await showSuccessMessage({
       title: "Created",
@@ -187,14 +220,15 @@ export const userContainer = () => {
     handleAction,
     handleClose,
     selectedData,
-    openEditModal,
+    openUserModal,
     handleFormSubmit,
     handleShowAdd,
     handleCloseAdd,
-    openAddModal,
     userData,
     modalMode,
     handleOnChange,
     errors,
+    hasChanges,
+    buttonLoading,
   };
 };

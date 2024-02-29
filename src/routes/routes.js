@@ -37,10 +37,10 @@ const publicRoutes = [
   {
     children: [{ path: "/login", element: <Login /> }],
   },
-  // {
-  //   path: "*",
-  //   element: <NotFound />,
-  // },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
 ];
 
 const routes = [...privateRoutes, ...adminRoutes, ...publicRoutes];

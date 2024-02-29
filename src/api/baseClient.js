@@ -27,6 +27,10 @@ client.interceptors.request.use(
 client.interceptors.response.use(
   (response) => {
     // You can modify the response data here
+    // console.log(response.data.message);
+    setTimeout(() => {
+      toast.success(response?.data?.message);
+    }, 100);
     return response;
   },
   (error) => {

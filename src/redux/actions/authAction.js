@@ -7,11 +7,11 @@ export const setReduxUserState = (userCreated) => (dispatch) => {
   });
 };
 
-export const logout = (dispatch) => {
+export const logout = () => (dispatch) => {
   document.location.href = "/login";
   // localStorage.removeItem("userInfo");
   // localStorage.removeItem("authToken");
-  localStorage.clear();
+  localStorage?.clear();
 
   dispatch({ type: LOGOUT_USER });
 };

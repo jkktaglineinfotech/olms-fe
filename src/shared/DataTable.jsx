@@ -24,15 +24,17 @@ const DataTable = ({ data, onAction, hasActions = false, loading = false }) => {
               )}
               {hasActions && (
                 <td>
-                  {row?.Actions?.map((option, optionIndex) => (
-                    <button
-                      key={optionIndex}
-                      className="btn btn-primary btn-sm me-2"
-                      onClick={() => onAction(row, option)}
-                    >
-                      {option}
-                    </button>
-                  ))}
+                  <div className="d-flex flex-row m-2">
+                    {row?.Actions?.map((option, optionIndex) => (
+                      <button
+                        key={optionIndex}
+                        className="btn btn-primary btn-sm me-2"
+                        onClick={() => onAction(row, option)}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
                 </td>
               )}
             </tr>

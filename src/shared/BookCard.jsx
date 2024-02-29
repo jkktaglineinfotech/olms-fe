@@ -2,7 +2,7 @@ import React from "react";
 import CommonButton from "./CommonButton";
 import { bookCardContainer } from "../container/bookCard.container";
 
-const BookCard = ({ name, author, currentAvailability, _id }) => {
+const BookCard = ({ name, author, currentAvailability }) => {
   const { handleIusse } = bookCardContainer();
   return (
     <div className="card mb-4">

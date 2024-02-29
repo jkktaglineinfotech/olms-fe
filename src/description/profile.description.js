@@ -18,7 +18,7 @@ export const profileAttributes = [
     name: "userName",
     value: "",
     isRequired: true,
-    validateAs: "userName",
+    validateAs: "name",
     errorMessage: "Please enter valid User name",
   },
   {

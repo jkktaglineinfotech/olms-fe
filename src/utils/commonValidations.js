@@ -6,7 +6,8 @@ import {
 
 const notEmpty = (val) => {
   const regex = /[^\s]$/;
-  return val ? !regex.test(trimmedVal(val)) : true;
+  // return val ? !regex.test(trimmedVal(val)) : true;
+  return val ? !regex.test(val) : true;
 };
 
 const nameValidation = (val) => {
@@ -21,7 +22,9 @@ export const emailValidation = (email) => {
 };
 
 export const mobileValidation = (val) => {
-  const regex = /^\+[1-9]{1}[0-9]{3,14}$/;
+  // const regex = /^\+[1-9]{1}[0-9]{3,14}$/;
+  const regex = /^[0-9]{10}$/;
+
   return regex.test(val);
 };
 
@@ -64,7 +67,9 @@ export const checkValid = ({ validateAs, value, passwordValue, label }) => {
     case "password":
       error = !validatePassword(value);
       break;
-
+    case "loginPassword":
+      error = notEmpty(value);
+      break;
     default:
       return false;
   }

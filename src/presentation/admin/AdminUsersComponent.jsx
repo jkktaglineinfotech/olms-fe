@@ -9,6 +9,7 @@ import CommonAddForm from "../../shared/CommonAddForm";
 import CommonButton from "../../shared/CommonButton";
 import AdminLayoutContainer from "../layout/AdminLayoutContainer";
 import CommonForm from "../../shared/CommonForm";
+import CommonModal from "../../shared/CommonModal";
 
 const AdminUsersComponent = () => {
   const {
@@ -17,14 +18,14 @@ const AdminUsersComponent = () => {
     handleAction,
     handleClose,
     userData,
-    openEditModal,
+    openUserModal,
     handleFormSubmit,
     handleShowAdd,
-    openAddModal,
-    handleCloseAdd,
+    hasChanges,
     modalMode,
     handleOnChange,
     errors,
+    buttonLoading,
   } = userContainer();
 
   return (
@@ -42,7 +43,7 @@ const AdminUsersComponent = () => {
       /> */}
       <div className="d-flex flex-column justify-content-end align-items-end mb-3">
         <CommonButton
-          busy={false}
+          disabled={false}
           onClick={handleShowAdd}
           value="Add User"
           className="btn btn-primary"
@@ -50,19 +51,24 @@ const AdminUsersComponent = () => {
         />
       </div>
       {modalMode && (
-        <CommonForm
+        <CommonModal
           modalProps={{
             title: modalMode === "Add" ? "Add New User" : "Edit New User",
-            showModal: modalMode === "Add" ? openAddModal : openEditModal,
-            handleClose: modalMode === "Add" ? handleCloseAdd : handleClose,
+            showModal: openUserModal,
+            handleClose: handleClose,
           }}
-          formAttributes={modalMode === "Add" ? addUserForm : editUserForm}
-          formData={userData}
-          onChange={handleOnChange}
-          onSubmit={handleFormSubmit}
-          buttonText={modalMode === "Add" ? "Add User" : "Update User"}
-          errors={errors}
-        />
+        >
+          <CommonForm
+            formAttributes={modalMode === "Add" ? addUserForm : editUserForm}
+            formData={userData}
+            onChange={handleOnChange}
+            onSubmit={handleFormSubmit}
+            buttonText={modalMode === "Add" ? "Add User" : "Update User"}
+            errors={errors}
+            disabled={!hasChanges}
+            buttonLoading={buttonLoading}
+          />
+        </CommonModal>
       )}
       {/* <CommonEditForm
         title={"Edit User Details"}
@@ -88,3 +94,21 @@ const AdminUsersComponent = () => {
 };
 
 export default AdminUsersComponent;
+
+/*
+      <CommonModal
+          modalProps={{
+            title: modalMode === "Add" ? "Add New User" : "Edit New User",
+            showModal: modalMode === "Add" ? openAddModal : openEditModal,
+            handleClose: modalMode === "Add" ? handleCloseAdd : handleClose,
+          }}
+          formProps={{
+            formAttributes: modalMode === "Add" ? addUserForm : editUserForm,
+            formData: userData,
+            onChange: handleOnChange,
+            onSubmit: handleFormSubmit,
+            buttonText: modalMode === "Add" ? "Add User" : "Update User",
+            errors: errors,
+          }}
+        >
+*/

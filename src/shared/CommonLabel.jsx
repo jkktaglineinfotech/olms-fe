@@ -1,10 +1,17 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 
-const CommonLabel = ({ value, classsName = "", ...rest }) => {
+const CommonLabel = ({ label, isRequired, ...rest }) => {
   return (
-    <Form.Label className={classsName} {...rest}>
-      {value}
+    <Form.Label {...rest}>
+      {isRequired ? (
+        <>
+          {label}
+          <span style={{ color: "red" }}>*</span>
+        </>
+      ) : (
+        label
+      )}{" "}
     </Form.Label>
   );
 };

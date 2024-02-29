@@ -55,3 +55,12 @@ export const issueBook = async (bookId, dueDate) => {
     catchError(error);
   }
 };
+
+export const getDashboardData = async () => {
+  try {
+    const { data } = await client.get(booksApiEndpoints.getBookDashboardData);
+    return data;
+  } catch (error) {
+    catchError(error);
+  }
+};

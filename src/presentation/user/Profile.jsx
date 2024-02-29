@@ -20,36 +20,40 @@ const Profile = () => {
       <div className="container text-center mt-5">
         <h2>My Profile</h2>
         <div className="mx-auto" style={{ maxWidth: "400px" }}>
-          {profileAttributes.map((item, index) => (
+          {profileAttributes.map(({ name, value, ...rest }, index) => (
             <div className="mb-3 row" key={index}>
               <CommonLabel
-                value={item.label}
+                {...rest}
                 //className="col-sm-4 col-form-label"
                 className="form-label"
               />
               <div className="">
                 <CommonInput
-                  disabled={true}
-                  type={item.type}
+                  {...{
+                    name,
+                    disabled: true,
+                    value: profileData[name],
+                    ...rest,
+                  }}
+                  // type={item.type}
                   //className="form-control"
-                  name={item.name}
-                  value={profileData[item.name]}
-                  onChange={handleInputChange}
-                  //required={item.isRequired}
-                  required={item.isRequired}
-                  className={`form-control ${
-                    profileData[item.name].length > 0 &&
-                    profileData[item.name].length < 6
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  // name={item.name}
+                  // value={profileData[item.name]}
+                  // onChange={handleInputChange}
+                  // required={item.isRequired}
+                  // className={`form-control ${
+                  //   profileData[item.name].length > 0 &&
+                  //   profileData[item.name].length < 6
+                  //     ? "is-invalid"
+                  //     : ""
+                  // }`}
                 />
-                {item.isRequired && !profileData[item.name].trim() && (
+                {/* {isRequired && errorMessage && (
                   <CommonErrorMessageBox
-                    message={item.errorMessage}
+                    message={errorMessage}
                     className="invalid-feedback"
                   />
-                )}
+                )} */}
               </div>
             </div>
           ))}

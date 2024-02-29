@@ -2,11 +2,9 @@ import React from "react";
 import CommonLabel from "./CommonLabel";
 import CommonInput from "./CommonInput";
 import CommonButton from "./CommonButton";
-import CommonModal from "./CommonModal";
 import CommonErrorMessageBox from "./CommonErrorMessageBox";
 
 const CommonForm = ({
-  modalProps,
   onSubmit,
   initialValues,
   formData,
@@ -15,49 +13,76 @@ const CommonForm = ({
   onChange,
   buttonText = "Add",
   errors,
+  disabled,
+  buttonLoading,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
   };
 
-  console.log(formData);
+  // console.log(formAttributes);
   return (
-    <CommonModal {...modalProps}>
-      <div className="mx-auto" style={{ maxWidth: "400px" }}>
-        {formAttributes.map((item, index) => (
+    <div className="mx-auto" style={{ maxWidth: "400px" }}>
+      {formAttributes?.map(
+        (
+          { name, validateAs, isRequired, value, errorMessage, ...rest },
+          index
+        ) => (
           <div className="mb-3 row" key={index}>
-            <CommonLabel value={item.label} className="form-label" />
+            <CommonLabel
+              className="form-label"
+              isRequired={isRequired}
+              {...rest}
+            />
             <div className="">
               <CommonInput
-                type={item.type}
-                name={item.name}
-                value={formData[item.name]}
-                onChange={onChange}
-                required={item.isRequired}
+                {...{
+                  name,
+                  value: formData[name],
+                  required: isRequired,
+                  onChange,
+                  ...rest,
+                }}
+                // type={item.type}
+                // name={item.name}
+                // value={formData[name]}
+                // onChange={onChange}
+                // required={item.isRequired}
               />
-              {errors[item.name] && (
+              {errors[name] && (
                 <CommonErrorMessageBox
-                  message={item.errorMessage}
+                  message={errorMessage}
                   variant="danger"
-                  className="mt-1 small"
+                  className="mt-1 p-2 small"
                 />
               )}
             </div>
           </div>
-        ))}
+        )
+      )}
 
-        <div>
-          <CommonButton
-            onClick={handleSubmit}
-            value={buttonText}
-            className="btn btn-primary"
-            type={"submit"}
-          />
-        </div>
+      <div>
+        <CommonButton
+          disabled={disabled}
+          loading={buttonLoading}
+          onClick={handleSubmit}
+          value={buttonText}
+          className="btn btn-primary"
+          type={"submit"}
+        />
       </div>
-    </CommonModal>
+    </div>
   );
 };
 
 export default CommonForm;
+
+/**
+ *       {...{
+                  name,
+                  value: formData[name],
+                  required: isRequired,
+                  ...rest,
+                }}
+ */

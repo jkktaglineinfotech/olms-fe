@@ -20,7 +20,7 @@ export const editUserForm = [
     name: "userName",
     value: "",
     isRequired: true,
-    validateAs: "userName",
+    validateAs: "name",
     errorMessage: "Please enter valid User name",
   },
   {
@@ -53,7 +53,7 @@ export const editUserForm = [
     name: "contact",
     value: "",
     isRequired: true,
-    validateAs: "contact",
+    validateAs: "mobile",
     errorMessage: "Please enter valid contact",
   },
 ];

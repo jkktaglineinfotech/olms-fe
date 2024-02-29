@@ -1,11 +1,6 @@
 import React from "react";
-
-import CommonInput from "../../shared/CommonInput";
-import CommonLabel from "../../shared/CommonLabel";
-
-import CommonButton from "../../shared/CommonButton";
-import CommonErrorMessageBox from "../../shared/CommonErrorMessageBox";
 import { loginContainer } from "../../container/login.container";
+import CommonForm from "../../shared/CommonForm";
 
 const Login = () => {
   const {
@@ -16,6 +11,8 @@ const Login = () => {
     loading,
     handleLogin,
     userLength,
+    hasChanges,
+    buttonLoading,
   } = loginContainer();
   return (
     <div className="container text-center mt-5">
@@ -26,7 +23,25 @@ const Login = () => {
         </Alert>
       )} */}
       <div className="mx-auto" style={{ maxWidth: "400px" }}>
-        {loginAttributes.map((item) => (
+        <CommonForm
+          formAttributes={loginAttributes}
+          formData={authData}
+          onChange={handleInputChange}
+          onSubmit={handleLogin}
+          buttonText={"Login"}
+          errors={errors}
+          disabled={!hasChanges}
+          buttonLoading={buttonLoading}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Login;
+
+{
+  /*loginAttributes.map((item) => (
           <div className="mb-3 row" key={item.id}>
             <CommonLabel
               value={item.label}
@@ -58,9 +73,7 @@ const Login = () => {
               )}
             </div>
           </div>
-        ))}
-
-        <div>
+           <div>
           <CommonButton
             busy={loading}
             onClick={handleLogin}
@@ -69,9 +82,5 @@ const Login = () => {
             type={"submit"}
           />
         </div>
-      </div>
-    </div>
-  );
-};
-
-export default Login;
+              ))*/
+}

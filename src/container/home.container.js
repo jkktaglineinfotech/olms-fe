@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { getBooks } from "../api/books";
-import { formatBookData } from "../utils/commonFunctions";
 
 export const homeContainer = () => {
   const [booksData, setBooksData] = useState([]);

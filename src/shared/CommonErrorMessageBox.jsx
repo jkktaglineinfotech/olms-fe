@@ -3,7 +3,7 @@ import { Alert } from "react-bootstrap";
 
 const CommonErrorMessageBox = ({ message, ...rest }) => {
   return (
-    <Alert tooltip {...rest}>
+    <Alert style={{ textAlign: "left" }} {...rest}>
       {message}
     </Alert>
   );

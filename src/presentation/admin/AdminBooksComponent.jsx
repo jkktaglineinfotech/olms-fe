@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import DataTable from "../../shared/DataTable";
 import { bookContainer } from "../../container/books.container";
 import Loader from "../layout/Loader";
-import CommonEditForm from "../../shared/CommonEditForm";
 import { commonBookForm } from "../../description/book.description";
 import AdminLayoutContainer from "../layout/AdminLayoutContainer";
 import CommonButton from "../../shared/CommonButton";
-import CommonAddForm from "../../shared/CommonAddForm";
-import CommonSearchBox from "../../shared/CommonSearchBox";
-import UserSelector from "./components/UserSelector";
 import CommonForm from "../../shared/CommonForm";
+import CommonModal from "../../shared/CommonModal";
 
 const AdminBooksComponent = () => {
   const {
@@ -20,13 +17,12 @@ const AdminBooksComponent = () => {
     bookData,
     handleAction,
     handleClose,
-    openEditModal,
-    selectedData,
     handleShowAdd,
-    openAddModal,
-    handleCloseAdd,
     modalMode,
     errors,
+    openBookModal,
+    hasChanges,
+    buttonLoading,
   } = bookContainer();
 
   return (
@@ -39,7 +35,7 @@ const AdminBooksComponent = () => {
             className="w-50 h-50"
           /> */}
         <CommonButton
-          busy={false}
+          disabled={false}
           onClick={handleShowAdd}
           value="Add Book"
           className="btn btn-primary"
@@ -47,19 +43,24 @@ const AdminBooksComponent = () => {
         />
       </div>
       {modalMode && (
-        <CommonForm
+        <CommonModal
           modalProps={{
             title: modalMode === "Add" ? "Add New Book" : "Edit New Book",
-            showModal: modalMode === "Add" ? openAddModal : openEditModal,
-            handleClose: modalMode === "Add" ? handleCloseAdd : handleClose,
+            showModal: openBookModal,
+            handleClose: handleClose,
           }}
-          formAttributes={commonBookForm}
-          formData={bookData}
-          onChange={handleOnChange}
-          onSubmit={handleFormSubmit}
-          buttonText={modalMode === "Add" ? "Add Book" : "Update Book"}
-          errors={errors}
-        />
+        >
+          <CommonForm
+            formAttributes={commonBookForm}
+            formData={bookData}
+            onChange={handleOnChange}
+            onSubmit={handleFormSubmit}
+            buttonText={modalMode === "Add" ? "Add Book" : "Update Book"}
+            errors={errors}
+            disabled={!hasChanges}
+            buttonLoading={buttonLoading}
+          />
+        </CommonModal>
       )}
 
       {/* <CommonAddForm
