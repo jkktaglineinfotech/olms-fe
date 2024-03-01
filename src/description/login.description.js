@@ -8,7 +8,8 @@ export const loginAttributes = [
     value: "",
     isRequired: true,
     validateAs: "email",
-    errorMessage: "Please enter valid email address",
+    errorMessage: "Please enter valid email",
+    validationMeesage: "Email name is required",
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ export const loginAttributes = [
     isRequired: true,
     validateAs: "loginPassword",
     errorMessage: "Please enter valid password",
+    validationMeesage: "Password is required",
   },
 ];
 

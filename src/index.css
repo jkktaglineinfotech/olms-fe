@@ -26,3 +26,13 @@ code {
   border-left: 0;
   margin-left: -1px;
 }
+
+button:disabled {
+  cursor: not-allowed;
+  pointer-events: all !important;
+}
+
+input:disabled {
+  cursor: not-allowed;
+  pointer-events: all !important;
+}

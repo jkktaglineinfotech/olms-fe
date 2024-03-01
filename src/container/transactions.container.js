@@ -11,7 +11,6 @@ export const transactionsContainer = () => {
     setLoading(true);
     const data = await getTransactions();
     setLoading(false);
-    console.log(data.data);
     setTransactionsData(data?.data);
   };
 
@@ -22,6 +21,5 @@ export const transactionsContainer = () => {
   const finalTransactionsData = transactionsData.map((data) =>
     formatTransactionData(data)
   );
-  console.log(finalTransactionsData);
   return { loading, finalTransactionsData };
 };

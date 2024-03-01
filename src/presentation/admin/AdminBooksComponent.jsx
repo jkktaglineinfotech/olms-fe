@@ -29,11 +29,6 @@ const AdminBooksComponent = () => {
     <AdminLayoutContainer>
       <Loader visible={loading} />
       <div className="d-flex flex-column justify-content-end align-items-end mb-3">
-        {/* <CommonSearchBox
-            onSearch={handleSearch}
-            onClear={handleClear}
-            className="w-50 h-50"
-          /> */}
         <CommonButton
           disabled={false}
           onClick={handleShowAdd}
@@ -63,27 +58,6 @@ const AdminBooksComponent = () => {
         </CommonModal>
       )}
 
-      {/* <CommonAddForm
-        title={"Add New Book"}
-        formAttributes={commonBookForm}
-        showModal={openAddModal}
-        handleClose={handleCloseAdd}
-        formData={bookData}
-        onChange={handleOnChange}
-        onSubmit={handleCreateBook}
-        buttonText={"Add Book"}
-      />
-      <CommonEditForm
-        title={"Edit Book Details"}
-        formAttributes={commonBookForm}
-        showModal={openEditModal}
-        formData={bookData}
-        handleClose={handleClose}
-        onSubmit={handleFormSubmit}
-        initialValues={selectedData}
-        onChange={handleOnChange}
-        buttonText={"Update Book"}
-      /> */}
       {finalBooksData?.length > 0 && (
         <DataTable
           loading={loading}

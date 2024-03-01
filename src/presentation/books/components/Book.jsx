@@ -1,5 +1,5 @@
 import React from "react";
-import BookCard from "../../../shared/BookCard";
+import BookCard from "./BookCard";
 
 const Book = (props) => {
   return <BookCard {...props} />;

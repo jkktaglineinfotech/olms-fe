@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { validateEditUserInfo } from "../utils/validations";
-import { toast } from "react-toastify";
-import { editUser } from "../api/users";
 
 export const profileContainer = () => {
   const userData = useSelector((state) => state?.userRegisterLogin?.userInfo);
@@ -13,7 +10,6 @@ export const profileContainer = () => {
     userName: userData.userName || "",
     contact: userData.contact || "",
   });
-  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setProfileData({
@@ -22,20 +18,7 @@ export const profileContainer = () => {
     });
   };
 
-  const handleUpdateUserInfo = async () => {
-    console.log(profileData);
-    const { ok, error } = validateEditUserInfo(profileData);
-    if (!ok) {
-      return toast.error(error);
-    }
-    console.log("success", profileData);
-  };
-
   return {
-    loading,
-    userData,
     profileData,
-    handleInputChange,
-    handleUpdateUserInfo,
   };
 };

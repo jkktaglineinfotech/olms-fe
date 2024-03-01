@@ -1,9 +1,8 @@
 export const loginUser = [
   {
     name: "Home",
-    route: "/home",
+    route: "/",
   },
-  // { name: "My Transactions", route: "/user-transactions" },
   { name: "Profile", route: "/profile" },
   { name: "Logout", route: null },
 ];

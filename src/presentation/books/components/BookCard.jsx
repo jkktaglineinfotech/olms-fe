@@ -1,9 +1,6 @@
 import React from "react";
-import CommonButton from "./CommonButton";
-import { bookCardContainer } from "../container/bookCard.container";
 
 const BookCard = ({ name, author, currentAvailability }) => {
-  const { handleIusse } = bookCardContainer();
   return (
     <div className="card mb-4">
       <div className="card-body">
@@ -16,14 +13,6 @@ const BookCard = ({ name, author, currentAvailability }) => {
         >
           {currentAvailability ? "Available" : "Not Available"}
         </p>
-        {/*currentAvailability && (
-          <CommonButton
-            onClick={() => handleIusse(_id)}
-            className="btn btn-primary"
-            value="Issue"
-            type={"button"}
-          />
-        )*/}
       </div>
     </div>
   );

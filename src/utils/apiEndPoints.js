@@ -5,9 +5,6 @@ export const booksApiEndpoints = {
   updateBook: "book",
   createBook: "book",
   deleteBook: "book",
-  issueBook: "book/issue",
-  returnBook: "book/return",
-  getBookDashboardData: "book/dashboard",
 };
 
 export const usersApiEndpoints = {

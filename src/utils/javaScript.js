@@ -1,8 +1,14 @@
-// import { showToast } from "./toastService";
-
 export const length = (array) => array?.length || 0;
 
 export const trimmedVal = (val) => val?.trim()?.replace(/\s+/g, " ");
+
+export const equal = (obj1, obj2 = 0) => obj1 === obj2;
+
+export const typeOf = (val, type) => equal(typeof val, type);
+
+export const isBool = (value) => typeOf(value, "boolean");
+
+export const isString = (value) => typeOf(value, "string");
 
 export const convertFirstLetterToLowerCase = (str) => {
   const words = str?.split(" ");

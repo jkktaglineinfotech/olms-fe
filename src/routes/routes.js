@@ -5,7 +5,7 @@ import AdminUsersComponent from "../presentation/admin/AdminUsersComponent";
 import AdminTransactionsComponent from "../presentation/admin/AdminTransactionsComponent";
 import ProtectedAdminRoute from "../presentation/auth/ProtectedAdminRoute";
 import ProtectedUserRoute from "../presentation/auth/ProtectedUserRoute";
-import NotFound from "../shared/NotFound";
+import NotFound from "../presentation/layout/NotFound";
 import Home from "../presentation/user/Home";
 import Profile from "../presentation/user/Profile";
 
@@ -13,10 +13,9 @@ const privateRoutes = [
   {
     element: <ProtectedUserRoute />,
     children: [
-      { path: "/home", element: <Home /> },
+      { path: "/", element: <Home /> },
       { path: "/transactions", element: <UserBooksComponent /> },
       { path: "/profile", element: <Profile /> },
-      // { path: "/logout", element: <Logout /> },
     ],
   },
 ];
@@ -28,7 +27,6 @@ const adminRoutes = [
       { path: "/admin/home", element: <AdminBooksComponent /> },
       { path: "/admin/users", element: <AdminUsersComponent /> },
       { path: "/admin/transactions", element: <AdminTransactionsComponent /> },
-      // { path: "/logout", element: <Logout /> },
     ],
   },
 ];

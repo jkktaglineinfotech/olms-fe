@@ -1,9 +1,9 @@
 import React from "react";
 import { Spinner } from "react-bootstrap";
 
-const CommonButton = ({ onClick, value, loading, disabled, ...rest }) => {
+const CommonButton = ({ value, loading, disabled, ...rest }) => {
   return (
-    <button onClick={onClick} disabled={loading || disabled} {...rest}>
+    <button disabled={loading || disabled} {...rest}>
       {loading ? (
         <div
           style={{ display: "flex", alignItems: "center", marginRight: "2px" }}

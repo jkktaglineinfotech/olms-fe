@@ -5,7 +5,6 @@ import {
   defaultBookData,
 } from "../description/book.description";
 import {
-  calculateDueDate,
   checkIsError,
   confirmDelete,
   formatBookData,
@@ -25,7 +24,6 @@ export const bookContainer = () => {
     setLoading(true);
     const data = await getBooks();
     setLoading(false);
-    // console.log(data.data);
     setBooksData(data?.data);
   };
 
@@ -35,8 +33,6 @@ export const bookContainer = () => {
 
   let finalBooksData = booksData?.map((data) => formatBookData(data));
 
-  // const [openEditModal, setOpenEditModal] = useState(false);
-  // const [openAddModal, setOpenAddModal] = useState(false);
   const [openBookModal, setOpenBookModal] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -68,7 +64,6 @@ export const bookContainer = () => {
   };
 
   const handleAction = async (row, option) => {
-    // console.log(`${option} clicked for row:`, row);
     setSelectedData(row);
     if (option === "Edit") {
       setModalMode("Edit");
@@ -92,13 +87,6 @@ export const bookContainer = () => {
       handleDeleteBook(row.id);
       return;
     }
-    // if (option === "Issue") {
-    //   console.log(row.id);
-    //   const dueDate = calculateDueDate();
-    //   openDropDownModal();
-    //   const data = await issueBook(row.id, dueDate);
-    //   console.log(data);
-    // }
   };
 
   const handleDeleteBook = async (bookId) => {
@@ -143,30 +131,20 @@ export const bookContainer = () => {
       setButtonLoading(false);
       return;
     }
-    // const { ok, error } = validateBookDetails(bookData);
-    // if (!ok) {
-    //   toast.error(error);
-    //   return;
-    // }
-    // setLoading(true);
     const data = await updateBook(selectedData.id, finalBookInfo);
-    // console.log("Submit", data);
     if (!data) {
       setButtonLoading(false);
-      // setLoading(false);
       return;
     }
     const updatedBooks = booksData.map((book) =>
       book._id === selectedData?.id ? data?.data : book
     );
 
-    console.log(updatedBooks);
     setBooksData([...updatedBooks]);
     setSelectedData(null);
     setErrors([]);
     handleClose();
     setButtonLoading(false);
-    // setLoading(false);
     await showSuccessMessage({
       title: "Updated",
       text: "Book details updated successfully !",
@@ -193,28 +171,19 @@ export const bookContainer = () => {
           value: finalBookInfo[item.name],
         }))
     );
+
     setErrors(errorObj);
     if (checkIsError(errorObj)) {
       setButtonLoading(false);
       return;
     }
-
-    // setLoading(true);
-
-    // const { ok, error } = validateBookDetails(bookInfo);
-    // if (!ok) {
-    //   toast.error(error);
-    //   return;
-    // }
     const data = await createBook(finalBookInfo);
     if (!data) {
       setButtonLoading(false);
-      // setLoading(false);
       return;
     }
     setBooksData([data.data, ...booksData]);
     setButtonLoading(false);
-    // setLoading(false);
     setErrors([]);
 
     handleCloseAdd();
@@ -230,16 +199,12 @@ export const bookContainer = () => {
       const bookAuthor = book.author.toLowerCase();
       return bookName.includes(searchTerm) || bookAuthor.includes(searchTerm);
     });
-    console.log("Searching for:", searchTerm, searchResult);
     setBooksData([...searchResult]);
   };
 
   const handleClear = () => {
     fetchBooks();
   };
-  // useEffect(() => {
-  //   finalBooksData = booksData?.map((data) => formatBookData(data));
-  // }, [booksData]);
 
   return {
     loading,

@@ -9,10 +9,7 @@ const CommonModal = ({ modalProps, children }) => {
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          {children}
-          {/* {React.cloneElement(children, { formProps: formProps })} */}
-        </Modal.Body>
+        <Modal.Body>{children}</Modal.Body>
       </Modal>
     </div>
   );

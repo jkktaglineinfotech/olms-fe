@@ -11,6 +11,7 @@ export const editUserForm = [
     isRequired: true,
     validateAs: "name",
     errorMessage: "Please enter valid name",
+    validationMeesage: "Name is required",
   },
   {
     id: 2,
@@ -22,9 +23,10 @@ export const editUserForm = [
     isRequired: true,
     validateAs: "name",
     errorMessage: "Please enter valid User name",
+    validationMeesage: "User name is required",
   },
   {
-    id: 4,
+    id: 3,
     control: "input",
     label: "Email",
     type: "email",
@@ -33,20 +35,10 @@ export const editUserForm = [
     isRequired: true,
     validateAs: "email",
     errorMessage: "Please enter valid Email",
+    validationMeesage: "Password is required",
   },
-  //   {
-  //     id: 4,
-  //     control: "input",
-  //     label: "Password",
-  //     type: "password",
-  //     name: "password",
-  //     value: "",
-  //     isRequired: true,
-  //     validateAs: "password",
-  //     errorMessage: "Please enter valid password",
-  //   },
   {
-    id: 5,
+    id: 4,
     control: "input",
     label: "Contact",
     type: "tel",
@@ -55,6 +47,7 @@ export const editUserForm = [
     isRequired: true,
     validateAs: "mobile",
     errorMessage: "Please enter valid contact",
+    validationMeesage: "Contact is required",
   },
 ];
 
@@ -69,6 +62,7 @@ export const addUserForm = [
     isRequired: true,
     validateAs: "name",
     errorMessage: "Please enter valid name",
+    validationMeesage: "Name is required",
   },
   {
     id: 2,
@@ -80,6 +74,7 @@ export const addUserForm = [
     isRequired: true,
     validateAs: "name",
     errorMessage: "Please enter valid User name",
+    validationMeesage: "User name is required",
   },
   {
     id: 4,
@@ -91,6 +86,7 @@ export const addUserForm = [
     isRequired: true,
     validateAs: "email",
     errorMessage: "Please enter valid Email",
+    validationMeesage: "Email is required",
   },
   {
     id: 4,
@@ -103,6 +99,7 @@ export const addUserForm = [
     validateAs: "password",
     errorMessage:
       "Please enter valid 8 characters password with one Uppercase,one Lowercase,one Digit and one Special Character",
+    validationMeesage: "Password is required",
   },
   {
     id: 5,
@@ -113,7 +110,8 @@ export const addUserForm = [
     value: "",
     isRequired: true,
     validateAs: "mobile",
-    errorMessage: "Please enter valid contact number.",
+    errorMessage: "Please enter valid contact.",
+    validationMeesage: "Contact is required",
   },
 ];
 

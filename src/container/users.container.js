@@ -11,11 +11,7 @@ import {
   formatUserData,
   showSuccessMessage,
 } from "../utils/commonFunctions";
-import {
-  validateCreateUserInfo,
-  validateEditUserInfo,
-} from "../utils/validations";
-import { toast } from "react-toastify";
+
 import { checkValid } from "../utils/commonValidations";
 import { trimObjectValues } from "../utils/javaScript";
 
@@ -51,7 +47,6 @@ export const userContainer = () => {
     setLoading(true);
     const data = await getUsers();
     setLoading(false);
-    // console.log(data.data);
     setUsersData(data?.data);
   };
 
@@ -62,8 +57,7 @@ export const userContainer = () => {
   const finalUserData = usersData.map((data) => formatUserData(data));
 
   const [selectedData, setSelectedData] = useState(null);
-  // const [openEditModal, setOpenEditModal] = useState(false);
-  // const [openAddModal, setOpenAddModal] = useState(false);
+
   const [openUserModal, setOpenUserModal] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -77,7 +71,6 @@ export const userContainer = () => {
   };
 
   const handleAction = async (row, option) => {
-    console.log(`${option} clicked for row:`, row);
     setSelectedData(row);
     if (option === "Edit") {
       setModalMode("Edit");
@@ -87,7 +80,6 @@ export const userContainer = () => {
         name: row.Name,
         userName: row.UserName,
         email: row.Email,
-        // password: row.Password,
         contact: row.Contact,
       });
       handleShow();
@@ -115,7 +107,6 @@ export const userContainer = () => {
           value: userInfo[item.name],
         }))
     );
-    console.log(errorObj);
     setErrors(errorObj);
     const finalUserInfo = trimObjectValues(userInfo);
 
@@ -123,12 +114,10 @@ export const userContainer = () => {
       setButtonLoading(false);
       return;
     }
-    // setLoading(true);
     delete finalUserInfo.password;
 
     const data = await editUser(selectedData.id, finalUserInfo);
     if (!data) {
-      // setLoading(false);
       setButtonLoading(false);
       setOpenUserModal(true);
       return;
@@ -136,12 +125,9 @@ export const userContainer = () => {
     const updatedUsers = usersData.map((user) =>
       user._id === selectedData?.id ? data?.data : user
     );
-
-    // console.log(updatedUsers);
     setUsersData([...updatedUsers]);
     setSelectedData(null);
     setErrors([]);
-    // setLoading(false);
     setButtonLoading(false);
     setOpenUserModal(false);
     await showSuccessMessage({
@@ -167,28 +153,18 @@ export const userContainer = () => {
         }))
     );
     setErrors(errorObj);
-    // console.log(errorObj);
     if (checkIsError(errorObj)) {
       setButtonLoading(false);
       return;
     }
-    // const { error, ok } = validateCreateUserInfo(userInfo);
-    // if (!ok) {
-    //   toast.error(error);
-    //   return;
-    // }
-    // setLoading(true);
 
     const data = await createUser(finalUserInfo);
     if (!data) {
       setButtonLoading(false);
-      // setLoading(false);
-      //handleCloseAdd();
       return;
     }
     setUsersData([data.data, ...usersData]);
     setButtonLoading(false);
-    // setLoading(false);
     setUserData({ ...defaultUserData });
     setErrors([]);
     handleCloseAdd();

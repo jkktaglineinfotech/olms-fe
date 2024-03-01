@@ -9,9 +9,6 @@ const ProtectedAdminRoute = () => {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (!role || userLength(userData) < 1) return navigate("/login");
-  // }, []);
   useEffect(() => {
     if (!role || userLength(userData) < 1) {
       setTimeout(() => {

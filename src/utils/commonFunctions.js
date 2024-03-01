@@ -66,20 +66,6 @@ export const formatUserData = (data) => {
   };
 };
 
-export const calculateDueDate = (daysToAdd = 15) => {
-  const currentDate = new Date();
-  const issueDate = currentDate.toISOString();
-
-  const dueDate = new Date(currentDate);
-  dueDate.setDate(dueDate.getDate() + daysToAdd);
-
-  const formattedDueDate = dueDate.toISOString();
-
-  return {
-    dueDate: formattedDueDate,
-  };
-};
-
 export const formatTransactionData = (data) => {
   return {
     Book: data.book.name,
@@ -91,5 +77,7 @@ export const formatTransactionData = (data) => {
   };
 };
 
-export const checkIsError = (errorObj) =>
-  Object.values(errorObj).some((val) => val);
+export const checkIsError = (errorObj) => {
+  //Object.values(errorObj).some((val) => !val);
+  return Object.values(errorObj).some((item) => item.error === true);
+};

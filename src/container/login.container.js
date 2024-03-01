@@ -35,31 +35,21 @@ export const loginContainer = () => {
 
   const handleLogin = async () => {
     setButtonLoading(true);
-    // const { error, ok } = validateLoginInfo({
-    //   email: authData.email,
-    //   password: authData.password,
-    // });
-
-    // if (!ok) {
-    //   setErrorMessage(error);
-    //   setShowAlert(true);
-    //   return;
-    // }
     const errorObj = {};
-    const error = loginAttributes.map(
-      (item) =>
-        (errorObj[item.name] = checkValid({
-          ...item,
-          value: authData[item.name],
-        }))
-    );
+    const error = loginAttributes.map((item) => {
+      errorObj[item.name] = checkValid({
+        ...item,
+        value: authData[item.name],
+        isRequired: item.isRequired,
+        validationMeesage: item.validationMeesage,
+        errorMessage: item.errorMessage,
+      });
+    });
     setErrors(errorObj);
-    // console.log(errorObj);
     if (checkIsError(errorObj)) {
       setButtonLoading(false);
       return;
     }
-
     setLoading(true);
     const data = await signIn(authData);
     if (!data) {
@@ -70,7 +60,6 @@ export const loginContainer = () => {
     localStorage.setItem("userInfo", JSON.stringify(data.data));
     localStorage.setItem("authToken", data?.data?.accessToken);
 
-    // console.log(data.data);
     setLoading(false);
 
     dispatch(setReduxUserState(data.data));

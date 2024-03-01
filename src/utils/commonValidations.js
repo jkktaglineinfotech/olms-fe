@@ -15,6 +15,10 @@ const nameValidation = (val) => {
   return regex.test(trimmedVal(val));
 };
 
+const validName = (val) => {
+  const regex = /^[a-zA-Z]+$/;
+  return regex.test(val);
+};
 export const emailValidation = (email) => {
   const regex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -38,40 +42,62 @@ const validatePassword = (password) => {
   return regex.test(password);
 };
 
-export const checkValid = ({ validateAs, value, passwordValue, label }) => {
+export const checkValid = ({
+  validateAs,
+  value,
+  isRequired,
+  errorMessage,
+  validationMeesage,
+}) => {
   let error;
+  let message;
 
   switch (validateAs) {
     case "required":
       error = notEmpty(value);
+      message = "";
       break;
     case "name":
-      error = length(value)
-        ? nameValidation(value)
-          ? false
-          : `${convertFirstLetterToLowerCase(
-              label
-            )} should only consist of alphabets`
+      isRequired && !value
+        ? ((error = notEmpty(value)), (message = validationMeesage))
+        : isRequired && value
+        ? ((error = !nameValidation(value)), (message = errorMessage))
         : true;
       break;
     case "email":
-      error = !emailValidation(value);
+      isRequired && !value
+        ? ((error = notEmpty(value)), (message = validationMeesage))
+        : isRequired && value
+        ? ((error = !emailValidation(value)), (message = errorMessage))
+        : true;
       break;
     case "mobile":
-      error = notEmpty(value) || value ? !mobileValidation(value) : false;
+      isRequired && !value
+        ? ((error = notEmpty(value)), (message = validationMeesage))
+        : isRequired && value
+        ? ((error = !mobileValidation(value)), (message = errorMessage))
+        : true;
       // error = value ? !mobileValidation(value) : false;
       break;
     case "email_mobile":
       error = !(emailValidation(value) || mobileValidation(value));
       break;
     case "password":
-      error = !validatePassword(value);
+      isRequired && !value
+        ? ((error = notEmpty(value)), (message = validationMeesage))
+        : isRequired && value
+        ? ((error = !validatePassword(value)), (message = errorMessage))
+        : true;
       break;
     case "loginPassword":
-      error = notEmpty(value);
+      isRequired && !value
+        ? ((error = notEmpty(value)), (message = validationMeesage))
+        : isRequired && value
+        ? ((error = notEmpty(value)), (message = errorMessage))
+        : true;
       break;
     default:
       return false;
   }
-  return error;
+  return { error, message };
 };

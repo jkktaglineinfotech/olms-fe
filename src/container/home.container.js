@@ -9,7 +9,6 @@ export const homeContainer = () => {
     setLoading(true);
     const data = await getBooks();
     setLoading(false);
-    console.log(data.data);
     setBooksData(data?.data);
   };
 

@@ -43,24 +43,3 @@ export const createBook = async (bookData) => {
     catchError(error);
   }
 };
-
-export const issueBook = async (bookId, dueDate) => {
-  try {
-    const { data } = await client.post(
-      `${booksApiEndpoints.issueBook}/${bookId}`,
-      dueDate
-    );
-    return data;
-  } catch (error) {
-    catchError(error);
-  }
-};
-
-export const getDashboardData = async () => {
-  try {
-    const { data } = await client.get(booksApiEndpoints.getBookDashboardData);
-    return data;
-  } catch (error) {
-    catchError(error);
-  }
-};

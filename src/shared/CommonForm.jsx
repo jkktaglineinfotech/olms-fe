@@ -3,6 +3,7 @@ import CommonLabel from "./CommonLabel";
 import CommonInput from "./CommonInput";
 import CommonButton from "./CommonButton";
 import CommonErrorMessageBox from "./CommonErrorMessageBox";
+import { checkIsError } from "../utils/commonFunctions";
 
 const CommonForm = ({
   onSubmit,
@@ -21,12 +22,19 @@ const CommonForm = ({
     onSubmit(formData);
   };
 
-  // console.log(formAttributes);
   return (
     <div className="mx-auto" style={{ maxWidth: "400px" }}>
       {formAttributes?.map(
         (
-          { name, validateAs, isRequired, value, errorMessage, ...rest },
+          {
+            name,
+            validateAs,
+            isRequired,
+            value,
+            validationMeesage,
+            errorMessage,
+            ...rest
+          },
           index
         ) => (
           <div className="mb-3 row" key={index}>
@@ -44,15 +52,10 @@ const CommonForm = ({
                   onChange,
                   ...rest,
                 }}
-                // type={item.type}
-                // name={item.name}
-                // value={formData[name]}
-                // onChange={onChange}
-                // required={item.isRequired}
               />
-              {errors[name] && (
+              {errors[name]?.error && (
                 <CommonErrorMessageBox
-                  message={errorMessage}
+                  message={errors[name].message}
                   variant="danger"
                   className="mt-1 p-2 small"
                 />

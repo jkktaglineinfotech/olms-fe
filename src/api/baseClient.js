@@ -27,10 +27,6 @@ client.interceptors.request.use(
 client.interceptors.response.use(
   (response) => {
     // You can modify the response data here
-    // console.log(response.data.message);
-    setTimeout(() => {
-      toast.success(response?.data?.message);
-    }, 100);
     return response;
   },
   (error) => {
@@ -52,55 +48,3 @@ client.interceptors.response.use(
 );
 
 export default client;
-
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-// import { LOGOUT_USER } from "../redux/constants/authConstants";
-// import { useDispatch } from "react-redux";
-
-// export const baseAxios = () => {
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
-//   const logout = () => {
-//     localStorage?.clear();
-//     dispatch({ type: LOGOUT_USER });
-//     navigate("/login");
-//   };
-
-//   const api = ({ method, endUrl, data, needToken }) =>
-//     new Promise((resolve) => {
-//       const accessToken = localStorage.getItem("accessToken");
-//       const headers = {
-//         "Content-Type": "application/json",
-//       };
-//       if (needToken && accessToken) {
-//         headers.assign({ "Authorization:": `Bearer ${accessToken}` });
-//       }
-//       axios({
-//         method,
-//         url: `${process.env.REACT_APP_API_URL}/${endUrl}`,
-//         data,
-//         headers,
-//       })
-//         .then((response) => {
-//           return resolve({
-//             data: response?.data
-//               ? response.data
-//               : response?.data?.data || response.data.data,
-//             status: response?.status,
-//             headers: response.headers,
-//           });
-//         })
-//         .catch((error) => {
-//           return resolve({
-//             error: response?.data?.message,
-//             error_code: response?.data?.status_code,
-//             statusCode: response?.status,
-//             data: response?.data,
-//           });
-//         });
-//     });
-//   return {
-//     api,
-//   };
-// };

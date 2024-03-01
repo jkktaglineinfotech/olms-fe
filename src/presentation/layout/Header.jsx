@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLength } from "../../utils/commonFunctions";
 import { logout } from "../../redux/actions/authAction";
 import CommonButton from "../../shared/CommonButton";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import CommonHeadingText from "../../shared/CommonHeadingText";
 
 const Header = () => {
   const userData = useSelector((state) => state?.userRegisterLogin?.userInfo);
@@ -20,7 +21,7 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <h1 className="navbar-brand">{projectName}</h1>
+        <CommonHeadingText className="navbar-brand" value={projectName} />
         <HeaderItems
           handleLogout={handleLogout}
           items={
@@ -45,8 +46,6 @@ const HeaderItems = ({ items, handleLogout }) => {
         <ul className="navbar-nav d-flex flex-column mx-2" key={index}>
           {item.name !== "Logout" ? (
             <li className="nav-item">
-              {/*               <Link className="nav-link" to={item.route}>
-               */}
               <NavLink
                 className="nav-link"
                 to={item.route}
@@ -59,7 +58,7 @@ const HeaderItems = ({ items, handleLogout }) => {
             <CommonButton
               onClick={handleLogout}
               value="Logout"
-              className="btn btn-primary"
+              className="btn btn-dark"
               type={"submit"}
             />
           )}
