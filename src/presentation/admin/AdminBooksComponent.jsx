@@ -10,7 +10,6 @@ import CommonModal from "../../shared/CommonModal";
 
 const AdminBooksComponent = () => {
   const {
-    loading,
     finalBooksData,
     handleOnChange,
     handleFormSubmit,
@@ -27,7 +26,6 @@ const AdminBooksComponent = () => {
 
   return (
     <AdminLayoutContainer>
-      <Loader visible={loading} />
       <div className="d-flex flex-column justify-content-end align-items-end mb-3">
         <CommonButton
           disabled={false}
@@ -60,7 +58,6 @@ const AdminBooksComponent = () => {
 
       {finalBooksData?.length > 0 && (
         <DataTable
-          loading={loading}
           data={finalBooksData}
           onAction={handleAction}
           hasActions={true}

@@ -14,12 +14,19 @@ import {
 
 import { checkValid } from "../utils/commonValidations";
 import { trimObjectValues } from "../utils/javaScript";
+import { useDispatch } from "react-redux";
+import {
+  startLoading,
+  stopLoadingError,
+  stopLoadingSuccess,
+} from "../redux/actions/loadingAction";
 
 export const userContainer = () => {
   const [usersData, setUsersData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
 
+  const dispatch = useDispatch();
   const handleShow = () => {
     setErrors([]);
     setOpenUserModal(true);
@@ -44,9 +51,11 @@ export const userContainer = () => {
   const [modalMode, setModalMode] = useState(null);
 
   const fetchUsers = async () => {
-    setLoading(true);
+    dispatch(startLoading());
+    // setLoading(true);
     const data = await getUsers();
-    setLoading(false);
+    dispatch(stopLoadingSuccess());
+    // setLoading(false);
     setUsersData(data?.data);
   };
 
@@ -175,23 +184,25 @@ export const userContainer = () => {
   };
 
   const handleDeleteUser = async (userId) => {
-    setLoading(true);
+    dispatch(startLoading());
+    // setLoading(true);
     const data = await deleteUser(userId);
     if (!data) {
-      setLoading(false);
+      dispatch(stopLoadingError());
+      // setLoading(false);
       return;
     }
     const updatedUsers = usersData.filter((user) => user._id !== userId);
     setUsersData([...updatedUsers]);
     setSelectedData(null);
-    setLoading(false);
+    dispatch(stopLoadingSuccess());
+    // setLoading(false);
     await showSuccessMessage({
       title: "Deleted",
       text: "User deleted successfully !",
     });
   };
   return {
-    loading,
     finalUserData,
     handleAction,
     handleClose,

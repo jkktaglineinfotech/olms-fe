@@ -10,6 +10,11 @@ import { useEffect } from "react";
 import { checkIsError, userLength } from "../utils/commonFunctions";
 import { signIn } from "../api/auth";
 import { setReduxUserState } from "../redux/actions/authAction";
+import {
+  startLoading,
+  stopLoadingError,
+  stopLoadingSuccess,
+} from "../redux/actions/loadingAction";
 export const loginContainer = () => {
   const userData = useSelector((state) => state?.userRegisterLogin?.userInfo);
 
@@ -50,31 +55,34 @@ export const loginContainer = () => {
       setButtonLoading(false);
       return;
     }
-    setLoading(true);
+
+    dispatch(startLoading());
+    // setLoading(true);
     const data = await signIn(authData);
     if (!data) {
       setButtonLoading(false);
-      setLoading(false);
+      dispatch(stopLoadingError());
+      // setLoading(false);
       return;
     }
     localStorage.setItem("userInfo", JSON.stringify(data.data));
     localStorage.setItem("authToken", data?.data?.accessToken);
-
-    setLoading(false);
+    dispatch(stopLoadingSuccess());
+    // setLoading(false);
 
     dispatch(setReduxUserState(data.data));
     setErrors([]);
     setButtonLoading(false);
 
     if (data?.data?.role === "ADMIN") navigate("/admin/home");
-    else navigate("/home");
+    else navigate("/");
   };
 
   useEffect(() => {
     if (userLength(userData) && userData.role === "ADMIN") {
       navigate("/admin/home");
     } else if (userLength(userData) && userData.role !== "ADMIN") {
-      navigate("/home");
+      navigate("/");
     }
   }, []);
   return {
@@ -82,7 +90,6 @@ export const loginContainer = () => {
     loginAttributes,
     errors,
     handleInputChange,
-    loading,
     handleLogin,
     userLength,
     hasChanges,

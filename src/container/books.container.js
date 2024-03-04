@@ -12,6 +12,12 @@ import {
 } from "../utils/commonFunctions";
 import { checkValid } from "../utils/commonValidations";
 import { trimObjectValues } from "../utils/javaScript";
+import {
+  startLoading,
+  stopLoadingError,
+  stopLoadingSuccess,
+} from "../redux/actions/loadingAction";
+import { useDispatch } from "react-redux";
 
 export const bookContainer = () => {
   const [booksData, setBooksData] = useState([]);
@@ -20,10 +26,13 @@ export const bookContainer = () => {
 
   const [modalMode, setModalMode] = useState(null);
 
+  const dispatch = useDispatch();
   const fetchBooks = async () => {
-    setLoading(true);
+    //setLoading(true);
+    dispatch(startLoading());
     const data = await getBooks();
-    setLoading(false);
+    //setLoading(false);
+    dispatch(stopLoadingSuccess());
     setBooksData(data?.data);
   };
 
@@ -91,17 +100,20 @@ export const bookContainer = () => {
 
   const handleDeleteBook = async (bookId) => {
     setButtonLoading(true);
-    setLoading(true);
+    // setLoading(true);
+    dispatch(startLoading());
     const data = await deleteBook(bookId);
     if (!data) {
-      setLoading(false);
+      dispatch(stopLoadingError());
+      // setLoading(false);
       return;
     }
     const updatedBooks = booksData.filter((book) => book._id !== bookId);
     setBooksData([...updatedBooks]);
     setSelectedData(null);
     setButtonLoading(false);
-    setLoading(false);
+    dispatch(stopLoadingSuccess());
+    // setLoading(false);
     await showSuccessMessage({
       title: "Deleted",
       text: "Book deleted successfully !",
@@ -207,7 +219,6 @@ export const bookContainer = () => {
   };
 
   return {
-    loading,
     finalBooksData,
     handleOnChange,
     handleFormSubmit,

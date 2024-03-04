@@ -10,7 +10,6 @@ import CommonModal from "../../shared/CommonModal";
 
 const AdminUsersComponent = () => {
   const {
-    loading,
     finalUserData,
     handleAction,
     handleClose,
@@ -27,8 +26,6 @@ const AdminUsersComponent = () => {
 
   return (
     <AdminLayoutContainer>
-      <Loader visible={loading} />
-
       <div className="d-flex flex-column justify-content-end align-items-end mb-3">
         <CommonButton
           disabled={false}
@@ -63,7 +60,6 @@ const AdminUsersComponent = () => {
           data={finalUserData}
           onAction={handleAction}
           hasActions={true}
-          loading={loading}
         />
       )}
     </AdminLayoutContainer>

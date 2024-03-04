@@ -4,8 +4,16 @@ import {
   STOP_LOADING_SUCCESS,
 } from "../constants/loadingConstants";
 
-export const startLoading = () => ({ type: START_LOADING });
+export const startLoading = () => (dispatch) => {
+  dispatch({ type: START_LOADING });
+};
 
-export const stopLoadingSuccess = () => ({ type: STOP_LOADING_SUCCESS });
+export const stopLoadingSuccess = () => (dispatch) =>
+  dispatch({
+    type: STOP_LOADING_SUCCESS,
+  });
 
-export const stopLoadingError = () => ({ type: STOP_LOADING_ERROR });
+export const stopLoadingError = () => (dispatch) =>
+  dispatch({
+    type: STOP_LOADING_ERROR,
+  });

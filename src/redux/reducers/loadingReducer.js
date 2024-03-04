@@ -4,7 +4,7 @@ import {
   STOP_LOADING_SUCCESS,
 } from "../constants/loadingConstants";
 
-const loadingReducer = (state = {}, action) => {
+export const loadingReducer = (state = {}, action) => {
   switch (action.type) {
     case START_LOADING:
       return { ...state, isLoading: true, error: null };
@@ -19,5 +19,3 @@ const loadingReducer = (state = {}, action) => {
       return state;
   }
 };
-
-export default loadingReducer;

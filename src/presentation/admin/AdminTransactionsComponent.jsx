@@ -5,17 +5,12 @@ import Loader from "../layout/Loader";
 import AdminLayoutContainer from "../layout/AdminLayoutContainer";
 
 const AdminTransactionsComponent = () => {
-  const { loading, finalTransactionsData } = transactionsContainer();
+  const { finalTransactionsData } = transactionsContainer();
 
   return (
     <AdminLayoutContainer>
-      <Loader visible={loading} />
       {finalTransactionsData?.length > 0 && (
-        <DataTable
-          data={finalTransactionsData}
-          loading={loading}
-          hasActions={false}
-        />
+        <DataTable data={finalTransactionsData} hasActions={false} />
       )}
     </AdminLayoutContainer>
   );
